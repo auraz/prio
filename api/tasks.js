@@ -1,4 +1,4 @@
-// Vercel serverless: state blob CRUD with auto-migration and bearer token auth.
+/** Vercel serverless: state blob CRUD with auto-migration and HTTP Basic Auth. */
 const { Redis } = require('@upstash/redis');
 
 const redis = Redis.fromEnv();
@@ -8,10 +8,14 @@ const DEFAULT_BLOB = { version: 2, tasks: [], energyLevel: 2, locked: null };
 const TASK_DEFAULTS = { importance: 'meaningful', impactScope: 'affects one area', energyRequired: 2 };
 
 function authorize(req) {
-  const token = process.env.PRIO_TOKEN;
-  if (!token) return true;
+  const user = process.env.BASIC_USER;
+  const pass = process.env.BASIC_PASS;
+  if (!user || !pass) return true;
   const header = req.headers.authorization || '';
-  return header === `Bearer ${token}`;
+  if (!header.startsWith('Basic ')) return false;
+  const decoded = Buffer.from(header.slice(6), 'base64').toString();
+  const [u, p] = decoded.split(':');
+  return u === user && p === pass;
 }
 
 function migrateTask(task) {

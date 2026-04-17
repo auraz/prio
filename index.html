@@ -12,7 +12,6 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Пріоритети" />
-  <meta name="prio-token" content="86b4e56f91a3de13093bf99558542339" />
   <title>Пріоритети</title>
   <link rel="icon" href="/icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/icon.svg" />
@@ -217,8 +216,7 @@
       return { picks, consensus: maxCount >= 2, conflict: maxCount < 2, topTaskId };
     }
 
-    const TOKEN = typeof window !== 'undefined' && document.querySelector('meta[name="prio-token"]')?.content || '';
-    const headers = () => ({ 'Content-Type': 'application/json', ...(TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {}) });
+    const headers = () => ({ 'Content-Type': 'application/json' });
     const CACHE_KEY = 'prio-state';
     function loadCache() { try { return JSON.parse(localStorage.getItem(CACHE_KEY)); } catch { return null; } }
     function saveCache(state) { try { localStorage.setItem(CACHE_KEY, JSON.stringify(state)); } catch {} }

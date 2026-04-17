@@ -30,7 +30,7 @@ References: government documents, newspaper ledgers, field notes, gov.uk.
 - Single-file React 18 + Tailwind CDN (no build step, Babel in browser)
 - Vercel serverless functions
 - Upstash Redis for cross-device sync
-- Bearer token auth (PRIO_TOKEN env var)
+- HTTP Basic Auth (Edge Middleware + API)
 - localStorage stale-while-revalidate cache
 - PWA manifest for home screen install
 - UK/EN language toggle (React Context i18n)
@@ -62,4 +62,5 @@ vercel deploy     # deploy to production
 
 - `UPSTASH_REDIS_REST_URL` ... Redis endpoint
 - `UPSTASH_REDIS_REST_TOKEN` ... Redis auth
-- `PRIO_TOKEN` ... API bearer token (optional, skip for open access)
+- `BASIC_USER` ... HTTP Basic Auth username
+- `BASIC_PASS` ... HTTP Basic Auth password

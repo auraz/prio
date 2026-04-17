@@ -1,14 +1,18 @@
-// Vercel serverless: daily close history with 90-day rolling window.
+/** Vercel serverless: daily close history with 90-day rolling window. */
 const { Redis } = require('@upstash/redis');
 
 const redis = Redis.fromEnv();
 const MAX_DAYS = 90;
 
 function authorize(req) {
-  const token = process.env.PRIO_TOKEN;
-  if (!token) return true;
+  const user = process.env.BASIC_USER;
+  const pass = process.env.BASIC_PASS;
+  if (!user || !pass) return true;
   const header = req.headers.authorization || '';
-  return header === `Bearer ${token}`;
+  if (!header.startsWith('Basic ')) return false;
+  const decoded = Buffer.from(header.slice(6), 'base64').toString();
+  const [u, p] = decoded.split(':');
+  return u === user && p === pass;
 }
 
 function cutoffDate() {
