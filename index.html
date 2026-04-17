@@ -3,34 +3,88 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#ef4444" />
+  <meta name="theme-color" content="#f0ebe3" />
   <title>Пріоритети</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⭐</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.85em%22 font-size=%2280%22 font-family=%22serif%22>П</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Brygada+1918:ital,wght@0,400;0,600;0,700;1,400&family=Arsenal:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Brygada 1918"', 'serif'],
+            body: ['Arsenal', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
   <style>
-    body { -webkit-tap-highlight-color: transparent; }
+    :root {
+      --paper: oklch(0.965 0.006 80);
+      --ink: oklch(0.18 0.01 80);
+      --ink-mid: oklch(0.42 0.008 80);
+      --ink-faint: oklch(0.62 0.005 80);
+      --rule: oklch(0.83 0.008 80);
+      --surface: oklch(0.92 0.007 80);
+      --mark: oklch(0.50 0.19 25);
+      --mark-bg: oklch(0.94 0.025 25);
+      --agree: oklch(0.35 0.06 155);
+    }
+    body {
+      font-family: 'Arsenal', sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      -webkit-tap-highlight-color: transparent;
+      line-height: 1.5;
+    }
+    input, textarea, select {
+      font-family: inherit;
+      border-radius: 0;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.25rem center;
+      background-size: 10px 6px;
+      padding-right: 1.5rem;
+    }
+    input:focus, textarea:focus, select:focus { outline: none; border-bottom-color: var(--ink) !important; }
+    button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+    button { cursor: pointer; }
+    ::selection { background: oklch(0.88 0.06 80); }
+    .label { font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-mid); }
+    .task-row { border-bottom: 1px solid var(--rule); }
+    .task-row:last-child { border-bottom: none; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
   </style>
 </head>
 <body>
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState, useEffect, useRef, useCallback } = React;
+    const { useState, useEffect, useRef } = React;
 
-    /* ── Icons ── */
-    const Icon = ({ path, size = 16 }) => (
-      <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">{path}</svg>
+    const Icon = ({ path, size = 16, ...rest }) => (
+      <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...rest}>{path}</svg>
     );
     const TrashIcon = (p) => <Icon {...p} path={<><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></>} />;
     const PlusIcon = (p) => <Icon {...p} path={<><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></>} />;
-    const StarIcon = (p) => <Icon {...p} path={<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>} />;
     const LockIcon = (p) => <Icon {...p} path={<><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></>} />;
     const ChevronIcon = ({ open, ...p }) => <Icon {...p} path={<polyline points={open ? "18 15 12 9 6 15" : "6 9 12 15 18 9"} />} />;
 
-    /* ── Scoring maps ── */
     const CONS_MAP = { 'незворотні': 3, 'зворотні': 2, 'ніякі': 1 };
     const DEAD_MAP = { 'сьогодні': 3, 'цей тиждень': 2, 'пізніше': 1 };
     const IMP_MAP = { 'life-changing': 3, 'meaningful': 2, 'nice-to-have': 1 };
@@ -38,24 +92,17 @@
 
     const today = () => new Date().toISOString().slice(0, 10);
 
-    /* ── Framework scoring (pure functions) ── */
     const scoreConsequences = (t) => (CONS_MAP[t.consequences] || 1) * (DEAD_MAP[t.deadline] || 1);
     const scoreImportance = (t) => (IMP_MAP[t.importance] || 2) * (SCOPE_MAP[t.impactScope] || 2);
     const scoreEnergy = (t, energy) => 4 - Math.abs((t.energyRequired || 2) - energy);
 
-    const getPriority = (score) => {
-      if (score >= 7) return { label: 'P0', color: 'bg-red-500' };
-      if (score >= 4) return { label: 'P1', color: 'bg-orange-500' };
-      if (score >= 2) return { label: 'P2', color: 'bg-yellow-500' };
-      return { label: 'P3', color: 'bg-gray-400' };
+    const priorityLabel = (score) => {
+      if (score >= 7) return { text: 'P0', style: { color: 'var(--mark)', fontWeight: 700 } };
+      if (score >= 4) return { text: 'P1', style: { color: 'var(--ink)', fontWeight: 700 } };
+      if (score >= 2) return { text: 'P2', style: { color: 'var(--ink-mid)', fontWeight: 400 } };
+      return { text: 'P3', style: { color: 'var(--ink-faint)', fontWeight: 400 } };
     };
 
-    /*
-     * Consensus engine: ordinal ranking per framework
-     * Each framework picks its #1 task (ties broken by createdAt, oldest first)
-     * 2+ frameworks agree on same #1 → consensus
-     * All 3 different → conflict
-     */
     function getFrameworkPicks(tasks, energyLevel) {
       if (tasks.length === 0) return { picks: {}, consensus: false, conflict: false, topTaskId: null };
       const rank = (scoreFn) => [...tasks].sort((a, b) => { const d = scoreFn(b) - scoreFn(a); return d !== 0 ? d : (a.createdAt || a.id) - (b.createdAt || b.id); })[0];
@@ -64,7 +111,7 @@
       const e = rank((t) => scoreEnergy(t, energyLevel));
       const picks = {
         consequences: { taskId: c.id, title: c.title, score: scoreConsequences(c), reason: `${c.consequences} + ${c.deadline}` },
-        importance: { taskId: i.id, title: i.title, score: scoreImportance(i), reason: `${c.importance || 'meaningful'} + ${i.impactScope || 'affects one area'}` },
+        importance: { taskId: i.id, title: i.title, score: scoreImportance(i), reason: `${i.importance || 'meaningful'} + ${i.impactScope || 'affects one area'}` },
         energy: { taskId: e.id, title: e.title, score: scoreEnergy(e, energyLevel), reason: `енергія ${e.energyRequired || 2} ↔ ${energyLevel}` },
       };
       const ids = [c.id, i.id, e.id];
@@ -75,19 +122,12 @@
       return { picks, consensus: maxCount >= 2, conflict: maxCount < 2, topTaskId };
     }
 
-    /* ── API helpers with auth ── */
     const TOKEN = typeof window !== 'undefined' && document.querySelector('meta[name="prio-token"]')?.content || '';
     const headers = () => ({ 'Content-Type': 'application/json', ...(TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {}) });
     const CACHE_KEY = 'prio-state';
+    function loadCache() { try { return JSON.parse(localStorage.getItem(CACHE_KEY)); } catch { return null; } }
+    function saveCache(state) { try { localStorage.setItem(CACHE_KEY, JSON.stringify(state)); } catch {} }
 
-    function loadCache() {
-      try { return JSON.parse(localStorage.getItem(CACHE_KEY)); } catch { return null; }
-    }
-    function saveCache(state) {
-      try { localStorage.setItem(CACHE_KEY, JSON.stringify(state)); } catch { /* noop */ }
-    }
-
-    /* ── Explanation matrices ── */
     const MATRIX_CONS = [
       { row: 'Незворотні', vals: [9, 6, 3] },
       { row: 'Зворотні', vals: [6, 4, 2] },
@@ -101,15 +141,18 @@
 
     /* ── Energy Toggle ── */
     function EnergyToggle({ level, onChange }) {
-      const levels = [{ v: 3, label: 'Висока', emoji: '🔥' }, { v: 2, label: 'Середня', emoji: '⚡' }, { v: 1, label: 'Низька', emoji: '🌙' }];
+      const levels = [{ v: 3, label: 'Висока' }, { v: 2, label: 'Середня' }, { v: 1, label: 'Низька' }];
       return (
-        <div className="flex gap-2 mb-4">
-          <span className="text-xs text-gray-500 self-center mr-1">Енергія:</span>
-          {levels.map(l => (
-            <button key={l.v} onClick={() => onChange(l.v)} className={`px-3 py-1.5 rounded-full text-xs font-medium transition ${level === l.v ? 'bg-blue-600 text-white shadow' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
-              {l.emoji} {l.label}
-            </button>
-          ))}
+        <div className="flex items-baseline gap-4 mb-6">
+          <span className="label">Енергія</span>
+          <div className="flex gap-3">
+            {levels.map(l => (
+              <button key={l.v} onClick={() => onChange(l.v)} className="text-sm pb-0.5 transition-colors"
+                style={{ color: level === l.v ? 'var(--ink)' : 'var(--ink-faint)', fontWeight: level === l.v ? 700 : 400, borderBottom: level === l.v ? '2px solid var(--ink)' : '2px solid transparent' }}>
+                {l.label}
+              </button>
+            ))}
+          </div>
         </div>
       );
     }
@@ -123,11 +166,13 @@
         const task = tasks.find(t => t.id === locked.taskId);
         if (!task) return null;
         return (
-          <div className="bg-gradient-to-r from-blue-600 to-blue-500 text-white p-4 rounded-lg mb-4 shadow cursor-pointer" onClick={onUnlock}>
-            <div className="flex items-center gap-2 text-xs uppercase tracking-wide opacity-90 mb-1"><LockIcon size={14} /> Фокус на сьогодні</div>
-            <div className="text-lg font-semibold">{task.title}</div>
-            <div className="text-xs opacity-80 mt-1">{task.sphere} · {task.consequences} · {task.deadline}</div>
-            <div className="text-xs opacity-60 mt-2">Натисни щоб розблокувати</div>
+          <div className="mb-6 cursor-pointer fade-up" onClick={onUnlock} style={{ background: 'var(--ink)', color: 'var(--paper)', padding: '1.25rem 1rem' }}>
+            <div className="label" style={{ color: 'oklch(0.65 0.005 80)', marginBottom: '0.5rem' }}>
+              <span className="inline-flex items-center gap-1.5"><LockIcon size={11} /> Фокус на сьогодні</span>
+            </div>
+            <div className="font-display text-xl" style={{ fontWeight: 600, lineHeight: 1.3 }}>«{task.title}»</div>
+            <div className="mt-2 text-xs" style={{ color: 'oklch(0.55 0.005 80)' }}>{task.sphere} · {task.consequences} · {task.deadline}</div>
+            <div className="mt-3 text-xs" style={{ color: 'oklch(0.45 0.005 80)' }}>натисни щоб розблокувати</div>
           </div>
         );
       }
@@ -137,30 +182,32 @@
         if (!task) return null;
         const agreeCount = Object.values(picks).filter(p => p.taskId === topTaskId).length;
         return (
-          <div className="bg-gradient-to-r from-green-600 to-emerald-500 text-white p-4 rounded-lg mb-4 shadow cursor-pointer" onClick={() => onLock(topTaskId)}>
-            <div className="flex items-center gap-2 text-xs uppercase tracking-wide opacity-90 mb-1"><StarIcon size={14} /> Консенсус ({agreeCount}/3 фреймворки)</div>
-            <div className="text-lg font-semibold">{task.title}</div>
-            <div className="text-xs opacity-80 mt-1">{task.sphere} · {task.consequences} · {task.deadline}</div>
-            <div className="text-xs opacity-60 mt-2">Натисни щоб зафіксувати</div>
+          <div className="mb-6 cursor-pointer fade-up" onClick={() => onLock(topTaskId)} style={{ borderTop: '1px solid var(--agree)', borderBottom: '1px solid var(--agree)', padding: '1.25rem 0' }}>
+            <div className="flex items-baseline justify-between mb-2">
+              <span className="label" style={{ color: 'var(--agree)' }}>Згода</span>
+              <span className="text-xs" style={{ color: 'var(--agree)' }}>{agreeCount}/3</span>
+            </div>
+            <div className="font-display text-xl" style={{ fontWeight: 600, lineHeight: 1.3 }}>→ «{task.title}»</div>
+            <div className="mt-2 text-xs" style={{ color: 'var(--ink-mid)' }}>{task.sphere} · {task.consequences} · {task.deadline}</div>
+            <div className="mt-3 text-xs" style={{ color: 'var(--ink-faint)' }}>натисни щоб зафіксувати</div>
           </div>
         );
       }
 
+      const fwLabels = { consequences: 'Наслідки', importance: 'Важливість', energy: 'Енергія' };
       return (
-        <div className="bg-gradient-to-r from-red-500 to-orange-500 text-white p-4 rounded-lg mb-4 shadow">
-          <div className="flex items-center gap-2 text-xs uppercase tracking-wide opacity-90 mb-2">⚡ Конфлікт — фреймворки не згодні</div>
-          <div className="space-y-2">
-            {Object.entries(picks).map(([fw, pick]) => {
-              const labels = { consequences: '📊 Наслідки', importance: '💎 Важливість', energy: '🔋 Енергія' };
-              return (
-                <div key={fw} className="bg-white/20 rounded p-2 cursor-pointer hover:bg-white/30 transition" onClick={() => onLock(pick.taskId)}>
-                  <div className="text-xs opacity-80">{labels[fw]}: {pick.reason}</div>
-                  <div className="font-medium text-sm">{pick.title}</div>
-                </div>
-              );
-            })}
+        <div className="mb-6 fade-up" style={{ borderTop: '2px solid var(--mark)', padding: '1.25rem 0' }}>
+          <div className="label mb-4" style={{ color: 'var(--mark)' }}>Конфлікт — фреймворки не згодні</div>
+          <div className="space-y-0">
+            {Object.entries(picks).map(([fw, pick]) => (
+              <div key={fw} className="flex items-baseline gap-3 cursor-pointer group py-2.5" onClick={() => onLock(pick.taskId)} style={{ borderBottom: '1px solid var(--rule)' }}>
+                <span className="text-xs shrink-0" style={{ color: 'var(--ink-mid)', width: '5.5rem' }}>{fwLabels[fw]}:</span>
+                <span className="font-display text-sm flex-1 group-hover:underline" style={{ fontWeight: 600 }}>«{pick.title}»</span>
+                <span className="text-xs tabular-nums shrink-0" style={{ color: 'var(--ink-faint)' }}>{pick.score}</span>
+              </div>
+            ))}
           </div>
-          <div className="text-xs opacity-60 mt-2">Обери один і зафіксуй як фокус</div>
+          <div className="mt-4 text-xs" style={{ color: 'var(--ink-faint)' }}>Обери один. Натисни щоб зафіксувати.</div>
         </div>
       );
     }
@@ -169,12 +216,13 @@
     function MorningRetro({ yesterdayEntry, onAnswer }) {
       if (!yesterdayEntry || yesterdayEntry.retrospective) return null;
       return (
-        <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
-          <div className="text-sm font-semibold text-purple-800 mb-2">Вчорашній вибір: {yesterdayEntry.lockedTaskTitle}</div>
-          <div className="text-xs text-purple-600 mb-3">Це був правильний вибір?</div>
-          <div className="flex gap-2">
-            {[{ v: 'right', label: '✅ Так' }, { v: 'wrong', label: '❌ Ні' }, { v: 'unclear', label: '🤷 Не ясно' }].map(o => (
-              <button key={o.v} onClick={() => onAnswer(o.v)} className="flex-1 py-2 px-3 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded text-xs font-medium transition">{o.label}</button>
+        <div className="mb-6 py-4 fade-up" style={{ borderTop: '1px solid var(--rule)', borderBottom: '1px solid var(--rule)' }}>
+          <div className="label mb-2">Вчорашній вибір</div>
+          <div className="font-display text-base mb-3" style={{ fontWeight: 600 }}>«{yesterdayEntry.lockedTaskTitle}»</div>
+          <div className="text-xs mb-3" style={{ color: 'var(--ink-mid)' }}>Це був правильний вибір?</div>
+          <div className="flex gap-4">
+            {[{ v: 'right', label: 'Так' }, { v: 'wrong', label: 'Ні' }, { v: 'unclear', label: 'Не ясно' }].map(o => (
+              <button key={o.v} onClick={() => onAnswer(o.v)} className="text-sm pb-0.5 hover:underline" style={{ color: 'var(--ink)' }}>{o.label}</button>
             ))}
           </div>
         </div>
@@ -188,13 +236,11 @@
       const todayEntry = history.find(e => e.date === today());
 
       if (todayEntry) {
-        const aligned = todayEntry.aligned;
         const weekEntries = history.filter(e => { const d = new Date(e.date); const now = new Date(); const weekAgo = new Date(now); weekAgo.setDate(weekAgo.getDate() - 7); return d >= weekAgo; });
         const alignedCount = weekEntries.filter(e => e.aligned).length;
         return (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-4 text-center">
-            <div className="text-sm font-semibold text-green-800">День закрито ✓</div>
-            <div className="text-xs text-green-600 mt-1">{aligned ? 'Збігся з фреймворками' : 'Обрав своє'} · Streak: {alignedCount}/7 за тиждень</div>
+          <div className="mt-8 pt-4" style={{ borderTop: '1px solid var(--rule)' }}>
+            <span className="text-sm" style={{ color: 'var(--agree)' }}>День закрито — {todayEntry.aligned ? 'збігся з фреймворками' : 'обрав своє'} · {alignedCount}/7 за тиждень</span>
           </div>
         );
       }
@@ -210,60 +256,63 @@
       };
 
       return (
-        <div className="border border-gray-200 rounded-lg p-4 mt-4">
-          <div className="text-sm font-semibold text-gray-700 mb-2">Закрити день</div>
-          {!locked && <div className="text-xs text-gray-400">Спершу зафіксуй задачу як фокус</div>}
+        <div className="mt-8 pt-4" style={{ borderTop: '1px solid var(--rule)' }}>
+          <div className="label mb-3">Закрити день</div>
+          {!locked && <div className="text-xs" style={{ color: 'var(--ink-faint)' }}>Спершу зафіксуй задачу як фокус</div>}
           {locked && (
             <>
-              <textarea value={reflection} onChange={(e) => setReflection(e.target.value)} placeholder="Рефлексія (опціонально)..." className="w-full p-2 border border-gray-200 rounded text-sm mb-2 resize-none" rows={2} />
-              <button onClick={handleClose} disabled={saving} className="w-full bg-gray-800 text-white py-2 rounded-lg text-sm font-medium hover:bg-gray-900 disabled:opacity-50">{saving ? 'Зберігаю...' : 'Закрити день'}</button>
+              <textarea value={reflection} onChange={(e) => setReflection(e.target.value)} placeholder="Рефлексія..." className="w-full mb-3 text-sm p-2" style={{ background: 'var(--surface)', border: '1px solid var(--rule)', resize: 'none' }} rows={2} />
+              <button onClick={handleClose} disabled={saving} className="text-sm py-2 px-6 transition-colors"
+                style={{ border: '1px solid var(--ink)', background: saving ? 'var(--surface)' : 'transparent', color: 'var(--ink)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', opacity: saving ? 0.5 : 1 }}>
+                {saving ? 'Зберігаю...' : 'Закрити день'}
+              </button>
             </>
           )}
         </div>
       );
     }
 
-    /* ── Framework Explanation ── */
+    /* ── Framework Info ── */
     function FrameworkInfo({ show, onToggle }) {
       if (!show) return (
-        <button onClick={onToggle} className="flex items-center gap-1 text-xs text-blue-600 mb-4 hover:underline">
-          <ChevronIcon open={false} size={14} /> Як працює пріоритизація
+        <button onClick={onToggle} className="flex items-center gap-1 text-xs mb-6 hover:underline" style={{ color: 'var(--ink-mid)' }}>
+          <ChevronIcon open={false} size={12} /> Як працює пріоритизація
         </button>
       );
 
+      const MatrixTable = ({ title, cols, rows }) => (
+        <div className="mb-5">
+          <div className="font-display text-sm mb-2" style={{ fontWeight: 600 }}>{title}</div>
+          <table className="w-full text-xs" style={{ borderCollapse: 'collapse' }}>
+            <thead>
+              <tr>
+                <th className="text-left py-1 pr-3" style={{ borderBottom: '1px solid var(--rule)' }}></th>
+                {cols.map(c => <th key={c} className="text-center py-1 px-2" style={{ borderBottom: '1px solid var(--rule)', fontWeight: 400, color: 'var(--ink-mid)' }}>{c}</th>)}
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map(r => (
+                <tr key={r.row}>
+                  <td className="text-left py-1.5 pr-3" style={{ borderBottom: '1px solid var(--rule)', color: 'var(--ink-mid)' }}>{r.row}</td>
+                  {r.vals.map((v, idx) => <td key={idx} className="text-center py-1.5 px-2 tabular-nums" style={{ borderBottom: '1px solid var(--rule)', fontWeight: v >= 6 ? 700 : 400, color: v >= 7 ? 'var(--mark)' : 'var(--ink)' }}>{v}</td>)}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+
       return (
-        <div className="mb-4">
-          <button onClick={onToggle} className="flex items-center gap-1 text-xs text-blue-600 mb-2 hover:underline">
-            <ChevronIcon open={true} size={14} /> Як працює пріоритизація
+        <div className="mb-6">
+          <button onClick={onToggle} className="flex items-center gap-1 text-xs mb-4 hover:underline" style={{ color: 'var(--ink-mid)' }}>
+            <ChevronIcon open={true} size={12} /> Як працює пріоритизація
           </button>
-          <div className="bg-white rounded-lg p-4 shadow space-y-4">
+          <div className="pt-4" style={{ borderTop: '1px solid var(--rule)' }}>
+            <MatrixTable title="Наслідки × Терміновість" cols={['Сьогодні', 'Тиждень', 'Пізніше']} rows={MATRIX_CONS} />
+            <MatrixTable title="Важливість × Масштаб впливу" cols={['Багато', 'Одна', 'Ізольо.']} rows={MATRIX_IMP} />
             <div>
-              <div className="text-sm font-semibold mb-2">📊 Наслідки x Терміновість</div>
-              <div className="grid grid-cols-4 gap-1 text-xs text-center">
-                <div></div><div className="font-semibold py-1">Сьогодні</div><div className="font-semibold py-1">Тиждень</div><div className="font-semibold py-1">Пізніше</div>
-                {MATRIX_CONS.map(r => (
-                  <React.Fragment key={r.row}>
-                    <div className="font-semibold text-left py-1">{r.row}</div>
-                    {r.vals.map((s, i) => <div key={i} className={`${getPriority(s).color} text-white rounded py-1 font-medium`}>{s}</div>)}
-                  </React.Fragment>
-                ))}
-              </div>
-            </div>
-            <div>
-              <div className="text-sm font-semibold mb-2">💎 Важливість x Масштаб впливу</div>
-              <div className="grid grid-cols-4 gap-1 text-xs text-center">
-                <div></div><div className="font-semibold py-1">Багато</div><div className="font-semibold py-1">Одна</div><div className="font-semibold py-1">Ізольо.</div>
-                {MATRIX_IMP.map(r => (
-                  <React.Fragment key={r.row}>
-                    <div className="font-semibold text-left py-1">{r.row}</div>
-                    {r.vals.map((s, i) => <div key={i} className={`${getPriority(s).color} text-white rounded py-1 font-medium`}>{s}</div>)}
-                  </React.Fragment>
-                ))}
-              </div>
-            </div>
-            <div>
-              <div className="text-sm font-semibold mb-2">🔋 Збіг енергії</div>
-              <div className="text-xs text-gray-600">Формула: 4 - |потрібна - поточна|. Діапазон: 2-4. Ідеальний збіг = 4.</div>
+              <div className="font-display text-sm mb-1" style={{ fontWeight: 600 }}>Збіг енергії</div>
+              <div className="text-xs" style={{ color: 'var(--ink-mid)' }}>4 − |потрібна − поточна|. Діапазон: 2–4.</div>
             </div>
           </div>
         </div>
@@ -289,52 +338,34 @@
       const [energyRequired, setEnergyRequired] = useState(2);
       const [showFramework, setShowFramework] = useState(false);
 
-      /* ── Load: cache first, then API ── */
       useEffect(() => {
         const cached = loadCache();
         if (cached) { setTasks(cached.tasks || []); setEnergyLevel(cached.energyLevel || 2); setLocked(cached.locked || null); }
-
         Promise.all([
           fetch('/api/tasks', { headers: headers() }).then(r => r.ok ? r.json() : Promise.reject()),
           fetch('/api/history', { headers: headers() }).then(r => r.ok ? r.json() : Promise.reject()),
         ]).then(([state, hist]) => {
           let { tasks: t, energyLevel: e, locked: l } = state;
-          if (l && l.date !== today()) { l = null; e = 2; } // midnight reset
-          setTasks(t || []);
-          setEnergyLevel(e || 2);
-          setLocked(l);
-          setHistory(hist || []);
+          if (l && l.date !== today()) { l = null; e = 2; }
+          setTasks(t || []); setEnergyLevel(e || 2); setLocked(l); setHistory(hist || []);
           saveCache({ tasks: t, energyLevel: e, locked: l });
-          loaded.current = true;
-          setLoading(false);
-        }).catch(() => {
-          if (!cached) setError('Не вдалося завантажити');
-          loaded.current = true;
-          setLoading(false);
-        });
+          loaded.current = true; setLoading(false);
+        }).catch(() => { if (!cached) setError('Не вдалося завантажити'); loaded.current = true; setLoading(false); });
       }, []);
 
-      /* ── Auto-save state to API + cache ── */
       useEffect(() => {
         if (!loaded.current) return;
         const blob = { version: 2, tasks, energyLevel, locked };
-        saveCache(blob);
-        setSaveError(false);
+        saveCache(blob); setSaveError(false);
         fetch('/api/tasks', { method: 'PUT', headers: headers(), body: JSON.stringify(blob) }).catch(() => setSaveError(true));
       }, [tasks, energyLevel, locked]);
 
-      /* ── Actions ── */
       const addTask = () => {
         if (!title.trim()) return;
         setTasks([...tasks, { id: Date.now(), title: title.trim(), consequences, deadline, sphere, importance, impactScope, energyRequired, createdAt: Date.now() }]);
         setTitle('');
       };
-
-      const deleteTask = (id) => {
-        setTasks(tasks.filter(t => t.id !== id));
-        if (locked?.taskId === id) setLocked(null);
-      };
-
+      const deleteTask = (id) => { setTasks(tasks.filter(t => t.id !== id)); if (locked?.taskId === id) setLocked(null); };
       const lockTask = (taskId) => setLocked({ taskId, date: today() });
       const unlockTask = () => setLocked(null);
 
@@ -359,125 +390,99 @@
         } catch { setSaveError(true); }
       };
 
-      /* ── Compute ── */
       const frameworkResult = getFrameworkPicks(tasks, energyLevel);
       const sortedTasks = [...tasks].sort((a, b) => scoreConsequences(b) - scoreConsequences(a));
       const yesterdayDate = (() => { const d = new Date(); d.setDate(d.getDate() - 1); return d.toISOString().slice(0, 10); })();
       const yesterdayEntry = history.find(e => e.date === yesterdayDate);
 
       if (loading && !loadCache()) return (
-        <div className="max-w-2xl mx-auto p-4 min-h-screen bg-gray-50 flex items-center justify-center">
-          <div className="text-gray-400 text-sm">Завантаження...</div>
-        </div>
+        <div className="min-h-screen flex items-center justify-center"><span className="text-sm" style={{ color: 'var(--ink-faint)' }}>Завантаження...</span></div>
+      );
+      if (error && tasks.length === 0) return (
+        <div className="min-h-screen flex items-center justify-center"><span className="text-sm" style={{ color: 'var(--mark)' }}>{error}</span></div>
       );
 
-      if (error && tasks.length === 0) return (
-        <div className="max-w-2xl mx-auto p-4 min-h-screen bg-gray-50 flex items-center justify-center">
-          <div className="text-red-500 text-sm">{error}</div>
-        </div>
-      );
+      const selectStyle = { background: 'transparent', border: 'none', borderBottom: '1px solid var(--rule)', padding: '0.375rem 0', fontSize: '0.875rem', color: 'var(--ink)', width: '100%' };
 
       return (
-        <div className="max-w-2xl mx-auto p-4 min-h-screen bg-gray-50">
-          <h1 className="text-2xl font-bold mb-1">Пріоритети</h1>
-          <p className="text-sm text-gray-600 mb-3">Механізм незгоди — три фреймворки, одне рішення</p>
+        <div className="mx-auto px-4 py-6 min-h-screen" style={{ maxWidth: '36rem' }}>
+          <header className="mb-8">
+            <h1 className="font-display" style={{ fontSize: '2rem', fontWeight: 400, lineHeight: 1.2, letterSpacing: '-0.01em' }}>Пріоритети</h1>
+            <p className="mt-1 text-sm" style={{ color: 'var(--ink-mid)' }}>Механізм незгоди — три фреймворки, одне рішення</p>
+          </header>
 
-          {saveError && <div className="bg-red-50 border border-red-200 text-red-700 text-xs p-2 rounded mb-3">Не вдалося зберегти. Зміни збережені локально.</div>}
+          {saveError && <div className="text-xs mb-4" style={{ color: 'var(--mark)' }}>Не вдалося зберегти. Зміни збережені локально.</div>}
 
           <MorningRetro yesterdayEntry={yesterdayEntry} onAnswer={answerRetro} />
-
           <EnergyToggle level={energyLevel} onChange={setEnergyLevel} />
-
           <HeroBanner tasks={tasks} locked={locked} frameworkResult={frameworkResult} onLock={lockTask} onUnlock={unlockTask} />
-
           <FrameworkInfo show={showFramework} onToggle={() => setShowFramework(!showFramework)} />
 
           {/* ── Task Form ── */}
-          <div className="bg-white rounded-lg p-4 shadow mb-4 space-y-3">
-            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && addTask()} placeholder="Нова задача..." className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-
-            <div className="grid grid-cols-2 gap-3">
+          <div className="mb-8 pb-6" style={{ borderBottom: '1px solid var(--rule)' }}>
+            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && addTask()} placeholder="Нова задача..."
+              className="w-full mb-4 text-base py-2" style={{ background: 'transparent', border: 'none', borderBottom: '2px solid var(--ink)', outline: 'none', fontFamily: '"Brygada 1918", serif', fontWeight: 600 }} />
+            <div className="grid grid-cols-2 gap-x-6 gap-y-3 mb-4">
               <div>
-                <label className="text-xs text-gray-600 block mb-1">Наслідки</label>
-                <select value={consequences} onChange={(e) => setConsequences(e.target.value)} className="w-full p-2 border border-gray-300 rounded-lg bg-white text-sm">
-                  <option value="незворотні">Незворотні</option>
-                  <option value="зворотні">Зворотні</option>
-                  <option value="ніякі">Ніякі</option>
-                </select>
+                <label className="label block mb-1">Наслідки</label>
+                <select value={consequences} onChange={(e) => setConsequences(e.target.value)} style={selectStyle}><option value="незворотні">Незворотні</option><option value="зворотні">Зворотні</option><option value="ніякі">Ніякі</option></select>
               </div>
               <div>
-                <label className="text-xs text-gray-600 block mb-1">Дедлайн</label>
-                <select value={deadline} onChange={(e) => setDeadline(e.target.value)} className="w-full p-2 border border-gray-300 rounded-lg bg-white text-sm">
-                  <option value="сьогодні">Сьогодні</option>
-                  <option value="цей тиждень">Цей тиждень</option>
-                  <option value="пізніше">Пізніше</option>
-                </select>
+                <label className="label block mb-1">Дедлайн</label>
+                <select value={deadline} onChange={(e) => setDeadline(e.target.value)} style={selectStyle}><option value="сьогодні">Сьогодні</option><option value="цей тиждень">Цей тиждень</option><option value="пізніше">Пізніше</option></select>
               </div>
               <div>
-                <label className="text-xs text-gray-600 block mb-1">Важливість</label>
-                <select value={importance} onChange={(e) => setImportance(e.target.value)} className="w-full p-2 border border-gray-300 rounded-lg bg-white text-sm">
-                  <option value="life-changing">Змінює життя</option>
-                  <option value="meaningful">Значуща</option>
-                  <option value="nice-to-have">Було б добре</option>
-                </select>
+                <label className="label block mb-1">Важливість</label>
+                <select value={importance} onChange={(e) => setImportance(e.target.value)} style={selectStyle}><option value="life-changing">Змінює життя</option><option value="meaningful">Значуща</option><option value="nice-to-have">Було б добре</option></select>
               </div>
               <div>
-                <label className="text-xs text-gray-600 block mb-1">Масштаб впливу</label>
-                <select value={impactScope} onChange={(e) => setImpactScope(e.target.value)} className="w-full p-2 border border-gray-300 rounded-lg bg-white text-sm">
-                  <option value="affects many areas">Багато сфер</option>
-                  <option value="affects one area">Одна сфера</option>
-                  <option value="isolated">Ізольований</option>
-                </select>
+                <label className="label block mb-1">Масштаб впливу</label>
+                <select value={impactScope} onChange={(e) => setImpactScope(e.target.value)} style={selectStyle}><option value="affects many areas">Багато сфер</option><option value="affects one area">Одна сфера</option><option value="isolated">Ізольований</option></select>
               </div>
               <div>
-                <label className="text-xs text-gray-600 block mb-1">Сфера</label>
-                <select value={sphere} onChange={(e) => setSphere(e.target.value)} className="w-full p-2 border border-gray-300 rounded-lg bg-white text-sm">
-                  <option value="робота">Робота</option>
-                  <option value="особисте">Особисте</option>
-                </select>
+                <label className="label block mb-1">Сфера</label>
+                <select value={sphere} onChange={(e) => setSphere(e.target.value)} style={selectStyle}><option value="робота">Робота</option><option value="особисте">Особисте</option></select>
               </div>
               <div>
-                <label className="text-xs text-gray-600 block mb-1">Потрібна енергія</label>
-                <select value={energyRequired} onChange={(e) => setEnergyRequired(Number(e.target.value))} className="w-full p-2 border border-gray-300 rounded-lg bg-white text-sm">
-                  <option value={3}>Глибокий фокус</option>
-                  <option value={2}>Помірна</option>
-                  <option value={1}>Автопілот</option>
-                </select>
+                <label className="label block mb-1">Потрібна енергія</label>
+                <select value={energyRequired} onChange={(e) => setEnergyRequired(Number(e.target.value))} style={selectStyle}><option value={3}>Глибокий фокус</option><option value={2}>Помірна</option><option value={1}>Автопілот</option></select>
               </div>
             </div>
-
-            <button onClick={addTask} className="w-full bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700 flex items-center justify-center gap-2">
-              <PlusIcon size={18} /> Додати
+            <button onClick={addTask} className="flex items-center gap-2 text-sm py-2 px-5 transition-all hover:bg-[var(--ink)] hover:text-[var(--paper)]"
+              style={{ border: '1px solid var(--ink)', background: 'transparent', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              <PlusIcon size={14} /> Додати
             </button>
           </div>
 
-          {/* ── Task List ── */}
+          {/* ── Task Ledger ── */}
           {sortedTasks.length > 0 ? (
-            <div className="space-y-2">
-              <h2 className="text-sm font-semibold text-gray-700 px-1">Всі задачі ({sortedTasks.length})</h2>
+            <div>
+              <div className="flex items-baseline justify-between mb-3">
+                <span className="label">Задачі</span>
+                <span className="text-xs tabular-nums" style={{ color: 'var(--ink-faint)' }}>{sortedTasks.length}</span>
+              </div>
               {sortedTasks.map((task) => {
-                const priority = getPriority(scoreConsequences(task));
+                const prio = priorityLabel(scoreConsequences(task));
                 const isLocked = locked?.taskId === task.id;
                 return (
-                  <div key={task.id} data-locked-title={isLocked ? task.title : undefined} className={`bg-white rounded-lg p-3 shadow flex items-start gap-3 ${isLocked ? 'ring-2 ring-blue-500' : ''}`}>
-                    <div className={`${priority.color} text-white text-xs font-bold px-2 py-1 rounded shrink-0`}>{priority.label}</div>
+                  <div key={task.id} data-locked-title={isLocked ? task.title : undefined} className="task-row flex items-start gap-3 py-3">
+                    <span className="text-xs tabular-nums shrink-0 pt-0.5" style={{ ...prio.style, width: '1.5rem' }}>{prio.text}</span>
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium flex items-center gap-1">{isLocked && <LockIcon size={12} />} {task.title}</div>
-                      <div className="text-xs text-gray-500 mt-1">{task.sphere} · {task.consequences} · {task.deadline}</div>
-                      <div className="text-xs text-gray-400 mt-0.5">
-                        💎 {task.importance || 'meaningful'} · 🔋 {['', 'автопілот', 'помірна', 'фокус'][task.energyRequired || 2]}
+                      <div className="text-sm" style={{ fontWeight: isLocked ? 700 : 400 }}>
+                        {isLocked && <LockIcon size={11} style={{ display: 'inline', verticalAlign: '-1px', marginRight: '4px' }} />}{task.title}
                       </div>
+                      <div className="text-xs mt-0.5" style={{ color: 'var(--ink-mid)' }}>{task.sphere} · {task.consequences} · {task.deadline}</div>
+                      <div className="text-xs mt-0.5 tabular-nums" style={{ color: 'var(--ink-faint)' }}>Н:{scoreConsequences(task)} В:{scoreImportance(task)} Е:{scoreEnergy(task, energyLevel)}</div>
                     </div>
-                    <button onClick={() => deleteTask(task.id)} className="text-gray-400 hover:text-red-500 p-1 shrink-0" aria-label="Видалити"><TrashIcon size={16} /></button>
+                    <button onClick={() => deleteTask(task.id)} className="shrink-0 pt-0.5 transition-colors hover:opacity-60" style={{ color: 'var(--ink-faint)' }} aria-label="Видалити"><TrashIcon size={14} /></button>
                   </div>
                 );
               })}
             </div>
           ) : (
-            <div className="text-center text-gray-500 text-sm mt-8">Поки порожньо. Додай першу задачу вище.</div>
+            <div className="mt-2 text-sm" style={{ color: 'var(--ink-mid)' }}>Задач немає. Додай першу — три фреймворки оцінять її незалежно.</div>
           )}
 
-          {/* ── Daily Close ── */}
           <DailyClose locked={locked} frameworkResult={frameworkResult} history={history} onClose={closeDay} />
         </div>
       );
