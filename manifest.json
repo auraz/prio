@@ -1,0 +1,17 @@
+{
+  "name": "Пріоритети",
+  "short_name": "Пріоритети",
+  "description": "Три фреймворки пріоритизації, одне рішення",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f0ebe3",
+  "theme_color": "#f0ebe3",
+  "lang": "uk",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

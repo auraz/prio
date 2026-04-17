@@ -2,10 +2,20 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#f0ebe3" />
+  <meta name="description" content="Три фреймворки пріоритизації оцінюють одні задачі, не погоджуються, і показують головне питання: якого голосу ти слухаєш?" />
+  <meta property="og:title" content="Пріоритети" />
+  <meta property="og:description" content="Три фреймворки пріоритизації, одне рішення. Персональний інструмент тренування рішень." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://prio-liart.vercel.app" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Пріоритети" />
   <title>Пріоритети</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.85em%22 font-size=%2280%22 font-family=%22serif%22>П</text></svg>" />
+  <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/icon.svg" />
+  <link rel="manifest" href="/manifest.json" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Brygada+1918:ital,wght@0,400;0,600;0,700;1,400&family=Arsenal:wght@400;700&display=swap" rel="stylesheet">
@@ -64,6 +74,7 @@
     .btn-add:hover, .btn-add:active { background: var(--ink) !important; color: var(--paper) !important; }
     .btn-close:hover, .btn-close:active { background: var(--ink) !important; color: var(--paper) !important; }
     ::selection { background: oklch(0.88 0.06 80); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
     .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-mid); }
     .task-row { border-bottom: 1px solid var(--rule); }
     .task-row:last-child { border-bottom: none; }
@@ -76,6 +87,7 @@
 </head>
 <body>
   <div id="root"></div>
+  <noscript><div style="font-family:Georgia,serif;max-width:36rem;margin:2rem auto;padding:0 1rem"><h1>Пріоритети</h1><p>Цей застосунок потребує JavaScript.</p></div></noscript>
 
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
@@ -408,7 +420,7 @@
       const selectStyle = { background: 'transparent', border: 'none', borderBottom: '1px solid var(--rule)', padding: '0.375rem 0', fontSize: '0.875rem', color: 'var(--ink)', width: '100%' };
 
       return (
-        <div className="mx-auto px-4 py-6 min-h-screen" style={{ maxWidth: '36rem' }}>
+        <main className="mx-auto px-4 py-6 min-h-screen" style={{ maxWidth: '36rem' }}>
           <header className="mb-8">
             <h1 className="font-display" style={{ fontSize: '2.25rem', fontWeight: 400, lineHeight: 1.2, letterSpacing: '-0.01em' }}>Пріоритети</h1>
             <p className="mt-1 text-sm" style={{ color: 'var(--ink-mid)' }}>Механізм незгоди — три фреймворки, одне рішення</p>
@@ -423,32 +435,33 @@
 
           {/* ── Task Form ── */}
           <div className="mb-8 pb-6" style={{ borderBottom: '1px solid var(--rule)' }}>
-            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && addTask()} placeholder="Нова задача..."
+            <label htmlFor="task-title" className="sr-only">Назва задачі</label>
+            <input id="task-title" type="text" value={title} onChange={(e) => setTitle(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && addTask()} placeholder="Нова задача..." autoComplete="off"
               className="w-full mb-4 text-base py-2" style={{ background: 'transparent', border: 'none', borderBottom: '2px solid var(--ink)', outline: 'none', fontFamily: '"Brygada 1918", serif', fontWeight: 600 }} />
             <div className="grid grid-cols-2 gap-x-6 gap-y-3 mb-4">
               <div>
-                <label className="label block mb-1">Наслідки</label>
-                <select value={consequences} onChange={(e) => setConsequences(e.target.value)} style={selectStyle}><option value="незворотні">Незворотні</option><option value="зворотні">Зворотні</option><option value="ніякі">Ніякі</option></select>
+                <label htmlFor="f-cons" className="label block mb-1">Наслідки</label>
+                <select id="f-cons" value={consequences} onChange={(e) => setConsequences(e.target.value)} style={selectStyle}><option value="незворотні">Незворотні</option><option value="зворотні">Зворотні</option><option value="ніякі">Ніякі</option></select>
               </div>
               <div>
-                <label className="label block mb-1">Дедлайн</label>
-                <select value={deadline} onChange={(e) => setDeadline(e.target.value)} style={selectStyle}><option value="сьогодні">Сьогодні</option><option value="цей тиждень">Цей тиждень</option><option value="пізніше">Пізніше</option></select>
+                <label htmlFor="f-dead" className="label block mb-1">Дедлайн</label>
+                <select id="f-dead" value={deadline} onChange={(e) => setDeadline(e.target.value)} style={selectStyle}><option value="сьогодні">Сьогодні</option><option value="цей тиждень">Цей тиждень</option><option value="пізніше">Пізніше</option></select>
               </div>
               <div>
-                <label className="label block mb-1">Важливість</label>
-                <select value={importance} onChange={(e) => setImportance(e.target.value)} style={selectStyle}><option value="life-changing">Змінює життя</option><option value="meaningful">Значуща</option><option value="nice-to-have">Було б добре</option></select>
+                <label htmlFor="f-imp" className="label block mb-1">Важливість</label>
+                <select id="f-imp" value={importance} onChange={(e) => setImportance(e.target.value)} style={selectStyle}><option value="life-changing">Змінює життя</option><option value="meaningful">Значуща</option><option value="nice-to-have">Було б добре</option></select>
               </div>
               <div>
-                <label className="label block mb-1">Масштаб впливу</label>
-                <select value={impactScope} onChange={(e) => setImpactScope(e.target.value)} style={selectStyle}><option value="affects many areas">Багато сфер</option><option value="affects one area">Одна сфера</option><option value="isolated">Ізольований</option></select>
+                <label htmlFor="f-scope" className="label block mb-1">Масштаб впливу</label>
+                <select id="f-scope" value={impactScope} onChange={(e) => setImpactScope(e.target.value)} style={selectStyle}><option value="affects many areas">Багато сфер</option><option value="affects one area">Одна сфера</option><option value="isolated">Ізольований</option></select>
               </div>
               <div>
-                <label className="label block mb-1">Сфера</label>
-                <select value={sphere} onChange={(e) => setSphere(e.target.value)} style={selectStyle}><option value="робота">Робота</option><option value="особисте">Особисте</option></select>
+                <label htmlFor="f-sphere" className="label block mb-1">Сфера</label>
+                <select id="f-sphere" value={sphere} onChange={(e) => setSphere(e.target.value)} style={selectStyle}><option value="робота">Робота</option><option value="особисте">Особисте</option></select>
               </div>
               <div>
-                <label className="label block mb-1">Потрібна енергія</label>
-                <select value={energyRequired} onChange={(e) => setEnergyRequired(Number(e.target.value))} style={selectStyle}><option value={3}>Глибокий фокус</option><option value={2}>Помірна</option><option value={1}>Автопілот</option></select>
+                <label htmlFor="f-energy" className="label block mb-1">Потрібна енергія</label>
+                <select id="f-energy" value={energyRequired} onChange={(e) => setEnergyRequired(Number(e.target.value))} style={selectStyle}><option value={3}>Глибокий фокус</option><option value={2}>Помірна</option><option value={1}>Автопілот</option></select>
               </div>
             </div>
             <button onClick={addTask} className="btn-add flex items-center gap-2 text-sm py-3 px-6"
@@ -487,7 +500,7 @@
           )}
 
           <DailyClose locked={locked} frameworkResult={frameworkResult} history={history} onClose={closeDay} />
-        </div>
+        </main>
       );
     }
 

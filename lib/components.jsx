@@ -30,7 +30,7 @@ export function EnergyToggle({ level, onChange }) {
   const levels = [{ v: 3, label: 'Висока' }, { v: 2, label: 'Середня' }, { v: 1, label: 'Низька' }];
   return (
     <div className="flex items-baseline gap-4 mb-6">
-      <span className="label">Енергія</span>
+      <span className="label">Моя енергія</span>
       <div className="flex gap-3">
         {levels.map(l => (
           <button key={l.v} onClick={() => onChange(l.v)} className="text-sm pb-0.5 transition-colors"
@@ -284,7 +284,7 @@ export function PriorityMatrix() {
   const selectStyle = { background: 'transparent', border: 'none', borderBottom: '1px solid var(--rule)', padding: '0.375rem 0', fontSize: '0.875rem', color: 'var(--ink)', width: '100%' };
 
   return (
-    <div className="mx-auto px-4 py-6 min-h-screen" style={{ maxWidth: '36rem' }}>
+    <main className="mx-auto px-4 py-6 min-h-screen" style={{ maxWidth: '36rem' }}>
       <header className="mb-8">
         <h1 className="font-display" style={{ fontSize: '2.25rem', fontWeight: 400, lineHeight: 1.2, letterSpacing: '-0.01em' }}>Пріоритети</h1>
         <p className="mt-1 text-sm" style={{ color: 'var(--ink-mid)' }}>Механізм незгоди — три фреймворки, одне рішення</p>
@@ -298,17 +298,18 @@ export function PriorityMatrix() {
       <FrameworkInfo show={showFramework} onToggle={() => setShowFramework(!showFramework)} />
 
       <div className="mb-8 pb-6" style={{ borderBottom: '1px solid var(--rule)' }}>
-        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && addTask()} placeholder="Нова задача..."
+        <label htmlFor="task-title" className="sr-only">Назва задачі</label>
+        <input id="task-title" type="text" value={title} onChange={(e) => setTitle(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && addTask()} placeholder="Нова задача..." autoComplete="off"
           className="w-full mb-4 text-base py-2" style={{ background: 'transparent', border: 'none', borderBottom: '2px solid var(--ink)', outline: 'none', fontFamily: '"Brygada 1918", serif', fontWeight: 600 }} />
         <div className="grid grid-cols-2 gap-x-6 gap-y-3 mb-4">
-          <div><label className="label block mb-1">Наслідки</label><select value={consequences} onChange={(e) => setConsequences(e.target.value)} style={selectStyle}><option value="незворотні">Незворотні</option><option value="зворотні">Зворотні</option><option value="ніякі">Ніякі</option></select></div>
-          <div><label className="label block mb-1">Дедлайн</label><select value={deadline} onChange={(e) => setDeadline(e.target.value)} style={selectStyle}><option value="сьогодні">Сьогодні</option><option value="цей тиждень">Цей тиждень</option><option value="пізніше">Пізніше</option></select></div>
-          <div><label className="label block mb-1">Важливість</label><select value={importance} onChange={(e) => setImportance(e.target.value)} style={selectStyle}><option value="life-changing">Змінює життя</option><option value="meaningful">Значуща</option><option value="nice-to-have">Було б добре</option></select></div>
-          <div><label className="label block mb-1">Масштаб впливу</label><select value={impactScope} onChange={(e) => setImpactScope(e.target.value)} style={selectStyle}><option value="affects many areas">Багато сфер</option><option value="affects one area">Одна сфера</option><option value="isolated">Ізольований</option></select></div>
-          <div><label className="label block mb-1">Сфера</label><select value={sphere} onChange={(e) => setSphere(e.target.value)} style={selectStyle}><option value="робота">Робота</option><option value="особисте">Особисте</option></select></div>
-          <div><label className="label block mb-1">Потрібна енергія</label><select value={energyRequired} onChange={(e) => setEnergyRequired(Number(e.target.value))} style={selectStyle}><option value={3}>Глибокий фокус</option><option value={2}>Помірна</option><option value={1}>Автопілот</option></select></div>
+          <div><label htmlFor="f-cons" className="label block mb-1">Наслідки</label><select id="f-cons" value={consequences} onChange={(e) => setConsequences(e.target.value)} style={selectStyle}><option value="незворотні">Незворотні</option><option value="зворотні">Зворотні</option><option value="ніякі">Ніякі</option></select></div>
+          <div><label htmlFor="f-dead" className="label block mb-1">Дедлайн</label><select id="f-dead" value={deadline} onChange={(e) => setDeadline(e.target.value)} style={selectStyle}><option value="сьогодні">Сьогодні</option><option value="цей тиждень">Цей тиждень</option><option value="пізніше">Пізніше</option></select></div>
+          <div><label htmlFor="f-imp" className="label block mb-1">Важливість</label><select id="f-imp" value={importance} onChange={(e) => setImportance(e.target.value)} style={selectStyle}><option value="life-changing">Змінює життя</option><option value="meaningful">Значуща</option><option value="nice-to-have">Було б добре</option></select></div>
+          <div><label htmlFor="f-scope" className="label block mb-1">Масштаб впливу</label><select id="f-scope" value={impactScope} onChange={(e) => setImpactScope(e.target.value)} style={selectStyle}><option value="affects many areas">Багато сфер</option><option value="affects one area">Одна сфера</option><option value="isolated">Ізольований</option></select></div>
+          <div><label htmlFor="f-sphere" className="label block mb-1">Сфера</label><select id="f-sphere" value={sphere} onChange={(e) => setSphere(e.target.value)} style={selectStyle}><option value="робота">Робота</option><option value="особисте">Особисте</option></select></div>
+          <div><label htmlFor="f-energy" className="label block mb-1">Потрібна енергія</label><select id="f-energy" value={energyRequired} onChange={(e) => setEnergyRequired(Number(e.target.value))} style={selectStyle}><option value={3}>Глибокий фокус</option><option value={2}>Помірна</option><option value={1}>Автопілот</option></select></div>
         </div>
-        <button onClick={addTask} className="flex items-center gap-2 text-sm py-2 px-5"
+        <button onClick={addTask} className="btn-add flex items-center gap-2 text-sm py-3 px-6"
           style={{ border: '1px solid var(--ink)', background: 'transparent', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
           <PlusIcon size={14} /> Додати
         </button>
@@ -333,7 +334,7 @@ export function PriorityMatrix() {
                   <div className="text-xs mt-0.5" style={{ color: 'var(--ink-mid)' }}>{task.sphere} · {task.consequences} · {task.deadline}</div>
                   <div className="text-xs mt-0.5 tabular-nums" style={{ color: 'var(--ink-faint)' }}>Н:{scoreConsequences(task)} В:{scoreImportance(task)} Е:{scoreEnergy(task, energyLevel)}</div>
                 </div>
-                <button onClick={() => deleteTask(task.id)} className="shrink-0 pt-0.5" style={{ color: 'var(--ink-faint)' }} aria-label="Видалити"><TrashIcon size={14} /></button>
+                <button onClick={() => deleteTask(task.id)} className="shrink-0 pt-0.5 transition-colors hover:opacity-60" style={{ color: 'var(--ink-faint)' }} aria-label="Видалити"><TrashIcon size={14} /></button>
               </div>
             );
           })}
@@ -343,6 +344,6 @@ export function PriorityMatrix() {
       )}
 
       <DailyClose locked={locked} frameworkResult={frameworkResult} history={history} onClose={closeDay} />
-    </div>
+    </main>
   );
 }
