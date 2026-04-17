@@ -4,18 +4,28 @@ Personal decision-training tool. Three prioritization frameworks score the same 
 
 ## How it works
 
-1. **Consequences x Deadline** — what breaks if you don't?
-2. **Personal Importance** — does this align with who you want to be?
-3. **Energy Match** — can you do this well right now?
+1. **Consequences × Deadline** — what breaks if you don't? (1–9)
+2. **Personal Importance × Impact Scope** — does this align with who you want to be? (1–9)
+3. **Energy Match** — can you do this well right now? (2–4)
 
-When frameworks agree: green banner, high confidence.
-When they disagree: red badge, each framework's pick shown. You choose and lock one as today's focus.
+When frameworks agree: consensus banner, high confidence → lock as today's focus.
+When they disagree: conflict state shows each framework's pick. You choose.
 
-Daily close captures your choice, tracks alignment with frameworks over time, and builds a decision streak.
+Daily close captures your choice, tracks alignment over time, and builds a decision streak. Morning retrospective asks: was yesterday's choice right?
+
+## Design
+
+Brutalist, typography-driven. Light theme on warm paper. No gradients, no shadows, no rounded corners, no emoji.
+
+- **Display font**: Brygada 1918 (Ukrainian-Polish historical serif, 1918)
+- **Body font**: Arsenal (Ukrainian-designed sans-serif)
+- **Palette**: OKLCH warm neutrals, single red accent for urgency
+
+References: government documents, newspaper ledgers, field notes, gov.uk.
 
 ## Stack
 
-- Single-file React + Tailwind (CDN, no build step)
+- Single-file React 18 + Tailwind CDN (no build step, Babel in browser)
 - Vercel serverless functions
 - Upstash Redis for cross-device sync
 - Bearer token auth (PRIO_TOKEN env var)
@@ -26,11 +36,20 @@ Daily close captures your choice, tracks alignment with frameworks over time, an
 - `GET/PUT /api/tasks` — state blob `{ version, tasks[], energyLevel, locked }`
 - `GET/POST /api/history` — daily close entries, 90-day rolling window
 
+## Testing
+
+```bash
+npm test    # 38 tests: scoring engine + UI components (vitest + testing-library)
+```
+
+- `lib/scoring.test.js` — 17 tests: scoring formulas, consensus/conflict detection, tie-breaking
+- `lib/ui.test.jsx` — 21 tests: EnergyToggle, HeroBanner (3 states), MorningRetro, DailyClose, full PriorityMatrix integration (add/delete/consensus)
+
 ## Development
 
 ```bash
 npm install
-npm test          # vitest: scoring + consensus engine
+npm test          # vitest: scoring + UI tests
 vercel dev        # local dev server
 vercel deploy     # deploy to production
 ```
