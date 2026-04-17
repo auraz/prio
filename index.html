@@ -147,7 +147,7 @@
       const levels = [{ v: 3, label: 'Висока' }, { v: 2, label: 'Середня' }, { v: 1, label: 'Низька' }];
       return (
         <div className="flex items-baseline gap-4 mb-6">
-          <span className="label">Енергія</span>
+          <span className="label">Моя енергія</span>
           <div className="flex gap-3">
             {levels.map(l => (
               <button key={l.v} onClick={() => onChange(l.v)} className="text-sm pb-0.5 transition-colors"
