@@ -10,5 +10,5 @@ export default function middleware(req) {
       if (user === process.env.BASIC_USER && pass === process.env.BASIC_PASS) return;
     }
   }
-  return new Response('Authentication required', { status: 401, headers: { 'WWW-Authenticate': 'Basic realm="Пріоритети"' } });
+  return new Response('Authentication required', { status: 401, headers: new Headers({ 'WWW-Authenticate': 'Basic realm="prio"' }) });
 }
