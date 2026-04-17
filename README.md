@@ -1,8 +1,8 @@
-# Пріоритети
+# Priorities / Пріоритети
 
-Personal decision-training tool. Three prioritization frameworks score the same tasks, disagree, and surface the real question: which voice are you listening to?
+How do I prioritize P0 tasks across work and not-work? Three frameworks score the same tasks, disagree, and show which voice I'm following.
 
-**Live:** https://prio.kryklia.com
+**About:** https://prio.kryklia.com/pr
 
 ## How it works
 
