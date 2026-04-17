@@ -13,6 +13,7 @@ export const priorityLabel = (score) => {
 
 export const T = {
   uk: {
+    title: 'Пріоритети',
     subtitle: 'Механізм незгоди — три фреймворки, одне рішення',
     energy: 'Моя енергія', energyHigh: 'Висока', energyMid: 'Середня', energyLow: 'Низька',
     focusToday: 'Фокус на сьогодні', clickUnlock: 'натисни щоб розблокувати',
@@ -40,6 +41,7 @@ export const T = {
     energyReason: (req, cur) => `енергія ${req} ↔ ${cur}`,
   },
   en: {
+    title: 'Priorities',
     subtitle: 'Disagreement engine — three frameworks, one decision',
     energy: 'My energy', energyHigh: 'High', energyMid: 'Medium', energyLow: 'Low',
     focusToday: "Today's focus", clickUnlock: 'click to unlock',
@@ -286,7 +288,7 @@ export function FrameworkInfo({ show, onToggle }) {
 
 export function PriorityMatrix() {
   const [lang, setLang] = useState(() => localStorage.getItem('prio-lang') || 'uk');
-  const switchLang = (l) => { setLang(l); localStorage.setItem('prio-lang', l); };
+  const switchLang = (l) => { setLang(l); localStorage.setItem('prio-lang', l); document.title = T[l].title; };
   const t = T[lang], d = D[lang];
 
   const [tasks, setTasks] = useState([]);
@@ -384,7 +386,7 @@ export function PriorityMatrix() {
     <LangContext.Provider value={lang}>
     <main className="mx-auto px-4 py-6 min-h-screen" style={{ maxWidth: '36rem' }}>
       <header className="mb-8">
-        <h1 className="font-display" style={{ fontSize: '2.25rem', fontWeight: 400, lineHeight: 1.2, letterSpacing: '-0.01em' }}>Пріоритети</h1>
+        <h1 className="font-display" style={{ fontSize: '2.25rem', fontWeight: 400, lineHeight: 1.2, letterSpacing: '-0.01em' }}>{t.title}</h1>
         <div className="flex items-baseline justify-between mt-1">
           <p className="text-sm" style={{ color: 'var(--ink-mid)' }}>{t.subtitle}</p>
           <div className="flex gap-2 shrink-0 ml-4">
