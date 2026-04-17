@@ -26,6 +26,7 @@
     }
   </script>
   <style>
+    html { font-size: 17px; }
     :root {
       --paper: oklch(0.965 0.006 80);
       --ink: oklch(0.18 0.01 80);
@@ -61,7 +62,7 @@
     button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
     button { cursor: pointer; }
     ::selection { background: oklch(0.88 0.06 80); }
-    .label { font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-mid); }
+    .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-mid); }
     .task-row { border-bottom: 1px solid var(--rule); }
     .task-row:last-child { border-bottom: none; }
     @keyframes fadeUp {
@@ -407,7 +408,7 @@
       return (
         <div className="mx-auto px-4 py-6 min-h-screen" style={{ maxWidth: '36rem' }}>
           <header className="mb-8">
-            <h1 className="font-display" style={{ fontSize: '2rem', fontWeight: 400, lineHeight: 1.2, letterSpacing: '-0.01em' }}>Пріоритети</h1>
+            <h1 className="font-display" style={{ fontSize: '2.25rem', fontWeight: 400, lineHeight: 1.2, letterSpacing: '-0.01em' }}>Пріоритети</h1>
             <p className="mt-1 text-sm" style={{ color: 'var(--ink-mid)' }}>Механізм незгоди — три фреймворки, одне рішення</p>
           </header>
 
