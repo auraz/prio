@@ -61,6 +61,8 @@
     input:focus, textarea:focus, select:focus { outline: none; border-bottom-color: var(--ink) !important; }
     button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
     button { cursor: pointer; }
+    .btn-add:hover, .btn-add:active { background: var(--ink) !important; color: var(--paper) !important; }
+    .btn-close:hover, .btn-close:active { background: var(--ink) !important; color: var(--paper) !important; }
     ::selection { background: oklch(0.88 0.06 80); }
     .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-mid); }
     .task-row { border-bottom: 1px solid var(--rule); }
@@ -449,7 +451,7 @@
                 <select value={energyRequired} onChange={(e) => setEnergyRequired(Number(e.target.value))} style={selectStyle}><option value={3}>Глибокий фокус</option><option value={2}>Помірна</option><option value={1}>Автопілот</option></select>
               </div>
             </div>
-            <button onClick={addTask} className="flex items-center gap-2 text-sm py-2 px-5 transition-all hover:bg-[var(--ink)] hover:text-[var(--paper)]"
+            <button onClick={addTask} className="btn-add flex items-center gap-2 text-sm py-3 px-6"
               style={{ border: '1px solid var(--ink)', background: 'transparent', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               <PlusIcon size={14} /> Додати
             </button>
