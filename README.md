@@ -33,6 +33,7 @@ References: government documents, newspaper ledgers, field notes, gov.uk.
 - Bearer token auth (PRIO_TOKEN env var)
 - localStorage stale-while-revalidate cache
 - PWA manifest for home screen install
+- UK/EN language toggle (React Context i18n)
 
 ## API
 
