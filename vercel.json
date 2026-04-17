@@ -1,4 +1,10 @@
 {
+  "rewrites": [
+    { "source": "/prio", "destination": "/index.html" }
+  ],
+  "redirects": [
+    { "source": "/", "destination": "/prio", "permanent": false }
+  ],
   "headers": [
     {
       "source": "/(.*)",
