@@ -2,7 +2,7 @@
 
 Personal decision-training tool. Three prioritization frameworks score the same tasks, disagree, and surface the real question: which voice are you listening to?
 
-**Live:** https://kryklia.com/prio
+**Live:** https://prio.kryklia.com
 
 ## How it works
 
