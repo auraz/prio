@@ -107,12 +107,15 @@
     .cta:hover { background: var(--ink); color: var(--paper); }
     .contact { font-size: 0.9rem; color: var(--ink-mid); }
     .contact a { color: var(--ink-mid); }
+    .screenshots { margin: 2rem 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start; }
+    .screenshots figure { margin: 0; }
+    .screenshots img { width: 100%; height: auto; border: 1px solid var(--rule); }
+    .screenshots figcaption { font-size: 0.8rem; color: var(--ink-faint); margin-top: 0.5rem; }
+    @media (max-width: 600px) { .screenshots { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
   <main>
-    <a href="/" class="back">&larr; Back to app</a>
-
     <p class="label">Press Release</p>
     <h1>Пріоритети: a tool that argues with you about what matters</h1>
 
@@ -166,6 +169,17 @@
 
     <blockquote>The content is the interface. No decoration that doesn't carry information.</blockquote>
 
+    <div class="screenshots">
+      <figure>
+        <img src="/screenshots/mobile-consensus.png" alt="Mobile view: locked focus task with consensus banner" width="375" loading="lazy" />
+        <figcaption>Mobile: locked focus for the day</figcaption>
+      </figure>
+      <figure>
+        <img src="/screenshots/desktop-full.png" alt="Desktop view: full app with task list, form, and scoring" width="640" loading="lazy" />
+        <figcaption>Desktop: task ledger with priority scores</figcaption>
+      </figure>
+    </div>
+
     <h2>Technical</h2>
 
     <ul>
@@ -176,11 +190,11 @@
       <li>38 automated tests covering scoring engine and UI components</li>
     </ul>
 
-    <h2>Availability</h2>
+    <h2>Source code</h2>
 
-    <p>Пріоритети is live and free to use.</p>
+    <p>Пріоритети is open source.</p>
 
-    <p style="margin: 2rem 0;"><a href="/" class="cta">Open Пріоритети</a></p>
+    <p style="margin: 2rem 0;"><a href="https://github.com/auraz/prio" class="cta">View on GitHub</a></p>
 
     <div class="rule"></div>
 
