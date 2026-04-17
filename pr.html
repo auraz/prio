@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#f0ebe3" />
-  <meta name="description" content="Announcing Пріоритети: a decision-training tool that uses three competing frameworks to surface which voice you're actually listening to." />
-  <meta property="og:title" content="Пріоритети — Press Release" />
-  <meta property="og:description" content="Three prioritization frameworks score your tasks, disagree, and surface the real question: which voice are you listening to?" />
+  <meta name="description" content="How do you prioritize P0 tasks across work and life? Пріоритети scores them through three lenses and shows which voice wins." />
+  <meta property="og:title" content="Пріоритети — my priorities, not someone else's" />
+  <meta property="og:description" content="How do you prioritize P0 tasks across work and life? Three frameworks, one decision." />
   <meta property="og:type" content="article" />
   <meta property="og:url" content="https://prio.kryklia.com/pr" />
-  <title>Пріоритети — Press Release</title>
+  <title>Пріоритети — my priorities, not someone else's</title>
   <link rel="icon" href="/icon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,6 +22,7 @@
       --ink-mid: oklch(0.42 0.008 80);
       --ink-faint: oklch(0.62 0.005 80);
       --rule: oklch(0.83 0.008 80);
+      --surface: oklch(0.92 0.007 80);
     }
     body {
       font-family: 'Arsenal', sans-serif;
@@ -35,63 +36,25 @@
       margin: 0 auto;
       padding: 3rem 1.25rem 4rem;
     }
-    h1, h2, h3 {
+    h1, h2 {
       font-family: 'Brygada 1918', serif;
       font-weight: 400;
       line-height: 1.25;
     }
-    h1 { font-size: 2rem; margin: 0 0 0.5rem; }
-    h2 { font-size: 1.25rem; margin: 2.5rem 0 0.75rem; }
+    h1 { font-size: 1.85rem; margin: 0 0 1.5rem; }
+    h2 { font-size: 1.15rem; margin: 2.5rem 0 0.75rem; }
     p { margin: 0 0 1rem; }
     a { color: var(--ink); }
     a:hover { text-decoration: none; }
-    .dateline {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--ink-mid);
-      margin-bottom: 2rem;
-    }
-    .label {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--ink-faint);
-    }
     .rule { border-top: 1px solid var(--rule); margin: 2.5rem 0; }
-    .back {
-      display: inline-block;
-      font-size: 0.85rem;
-      color: var(--ink-mid);
-      text-decoration: none;
-      margin-bottom: 2rem;
-    }
-    .back:hover { color: var(--ink); }
-    blockquote {
-      margin: 1.5rem 0;
-      padding: 0 0 0 1.25rem;
-      border-left: none;
-      font-family: 'Brygada 1918', serif;
-      font-style: italic;
-      font-size: 1.05rem;
-      color: var(--ink-mid);
-    }
     ul { padding-left: 1.25rem; margin: 0 0 1rem; }
     li { margin-bottom: 0.4rem; }
-    .frameworks {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1.25rem;
-      margin: 1.5rem 0 2rem;
-    }
-    .fw { padding: 1rem 0; border-top: 1px solid var(--rule); }
-    .fw-name {
-      font-family: 'Brygada 1918', serif;
-      font-weight: 600;
-      font-size: 0.95rem;
-      margin-bottom: 0.25rem;
-    }
-    .fw-desc { font-size: 0.9rem; color: var(--ink-mid); }
+    .chat { background: var(--surface); padding: 1.25rem; margin: 1.5rem 0; font-size: 0.95rem; font-style: italic; color: var(--ink-mid); }
+    .scoring { margin: 1.5rem 0 2rem; font-size: 0.9rem; }
+    .scoring table { width: 100%; border-collapse: collapse; }
+    .scoring th { text-align: left; font-family: 'Brygada 1918', serif; font-weight: 600; padding: 0.6rem 0; border-bottom: 1px solid var(--rule); }
+    .scoring td { padding: 0.4rem 0; border-bottom: 1px solid var(--rule); }
+    .scoring td:last-child { text-align: right; font-family: 'Brygada 1918', serif; color: var(--ink-mid); }
     .cta {
       display: inline-block;
       font-size: 0.85rem;
@@ -105,8 +68,8 @@
       transition: background 0.15s, color 0.15s;
     }
     .cta:hover { background: var(--ink); color: var(--paper); }
-    .contact { font-size: 0.9rem; color: var(--ink-mid); }
-    .contact a { color: var(--ink-mid); }
+    .signoff { font-size: 0.9rem; color: var(--ink-mid); }
+    .signoff a { color: var(--ink-mid); }
     .screenshots { margin: 2rem 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start; }
     .screenshots figure { margin: 0; }
     .screenshots img { width: 100%; height: auto; border: 1px solid var(--rule); }
@@ -116,94 +79,74 @@
 </head>
 <body>
   <main>
-    <p class="label">Press Release</p>
-    <h1>Пріоритети: a tool that argues with you about what matters</h1>
+    <h1>How do I prioritize P0 tasks across work and not-work?</h1>
 
-    <p class="dateline">April 17, 2026 &mdash; Kyiv, Ukraine</p>
+    <p>I asked this question and got the usual advice. Todoist. Two lists. Eisenhower matrix. Review both in the morning.</p>
 
-    <p>Most priority systems give you one answer. Пріоритети gives you three, and they disagree.</p>
+    <p>I tried. My work P0s always won. They had deadlines, Slack threads, consequences. "Start running" sat on my list for months. Not because it didn't matter. Because nothing scored it against my work tasks in the same frame.</p>
 
-    <p>Пріоритети is a personal decision-training tool that runs three independent prioritization frameworks against the same task list. When they agree, you get a clear signal. When they don't, the disagreement itself is the insight: it surfaces which voice you're actually listening to.</p>
+    <p>I looked at Todoist, TickTick, Things, Notion. They all had categories. None of them asked: what happens if I don't do this? Is it irreversible? Does it match my energy right now? They sort by due date or by whatever quadrant I drag things into. The criteria were always someone else's.</p>
 
-    <h2>The problem</h2>
+    <div class="chat">"I need my priorities, not someone else's."</div>
 
-    <p>Productivity tools tell you what to do next. They optimize for throughput. But the hard problem isn't knowing what's urgent. It's knowing whether urgency is the right lens.</p>
+    <p>So I built <a href="https://github.com/auraz/prio"><strong>Пріоритети</strong></a>. It scores every task through three independent frameworks. When they agree, I get a clear signal. When they don't, the disagreement tells me something: which voice I'm actually following.</p>
 
-    <p>A deadline screams. Personal growth whispers. Your energy level on a given morning changes everything. No single framework captures all three forces at once, and when they conflict, that conflict is where the real decision lives.</p>
+    <h2>Three frameworks score the same task</h2>
 
-    <h2>Three frameworks, one decision</h2>
-
-    <div class="frameworks">
-      <div class="fw">
-        <div class="fw-name">Consequences x Deadline</div>
-        <div class="fw-desc">What breaks if you don't do this? Score: 1-9. Irreversible consequences with a today deadline score highest.</div>
-      </div>
-      <div class="fw">
-        <div class="fw-name">Personal Importance x Impact Scope</div>
-        <div class="fw-desc">Does this align with who you want to be? Score: 1-9. Life-changing decisions affecting many areas score highest.</div>
-      </div>
-      <div class="fw">
-        <div class="fw-name">Energy Match</div>
-        <div class="fw-desc">Can you do this well right now? Score: 2-4. Perfect match between required and available energy scores highest.</div>
-      </div>
+    <div class="scoring">
+      <table>
+        <tr><th>Framework</th><th>Question</th><th>Range</th></tr>
+        <tr><td>Consequences × Deadline</td><td>What breaks if I don't do this?</td><td>1–9</td></tr>
+        <tr><td>Importance × Impact Scope</td><td>Does this align with who I want to be?</td><td>1–9</td></tr>
+        <tr><td>Energy Match</td><td>Can I do this well right now?</td><td>2–4</td></tr>
+      </table>
     </div>
 
-    <p>When two or more frameworks agree on a top task, a consensus banner appears. Lock it as today's focus. When all three point at different tasks, a conflict state shows each framework's pick. You choose which voice to follow.</p>
+    <p>Consequences × Deadline is the voice of urgency. Importance × Impact Scope is the voice of values. Energy Match is the voice of my body. They run independently. They often disagree.</p>
 
-    <h2>Daily ritual, not a task manager</h2>
+    <p>When two or more agree, a consensus banner shows up. I lock it as today's focus. When all three point at different tasks, that's a conflict state. The app shows each pick. I choose which voice to follow.</p>
 
-    <p>Пріоритети is not a to-do list. It's a twice-daily ritual.</p>
+    <h2>Morning and evening</h2>
+
+    <p>Not a task manager. A twice-daily ritual.</p>
 
     <ul>
-      <li><strong>Morning:</strong> set your energy level, review framework rankings, commit to one task for the day. If yesterday had a locked task, the morning retrospective asks: was that the right choice?</li>
-      <li><strong>Evening:</strong> close the day with a reflection. The app records whether you followed the frameworks' consensus or chose your own path. Alignment tracked over time builds a decision streak.</li>
+      <li><strong>Morning:</strong> set my energy, review the three rankings, lock one task.</li>
+      <li><strong>Evening:</strong> close the day. Did I follow the frameworks or go my own way?</li>
     </ul>
 
-    <p>The goal isn't to always follow the frameworks. It's to notice when you override them and why.</p>
-
-    <h2>Design</h2>
-
-    <p>Brutalist. Typography-driven. No gradients, no shadows, no rounded corners, no emoji. Light theme on warm paper, like a government document or a surgeon's checklist.</p>
-
-    <p>Typography is Brygada 1918, a Ukrainian-Polish historical serif designed in 1918, paired with Arsenal, a Ukrainian-designed sans-serif. The interface is in Ukrainian. OKLCH color palette with warm neutrals and a single red accent for urgency.</p>
-
-    <blockquote>The content is the interface. No decoration that doesn't carry information.</blockquote>
+    <p>Alignment tracked over time builds a decision streak. The goal isn't to always follow the frameworks. It's to notice when I override them.</p>
 
     <div class="screenshots">
       <figure>
-        <img src="/screenshots/mobile-consensus.png" alt="Mobile view: locked focus task with consensus banner" width="375" loading="lazy" />
-        <figcaption>Mobile: locked focus for the day</figcaption>
+        <img src="/screenshots/mobile-consensus.png" alt="Mobile: locked focus task with consensus banner" width="375" loading="lazy" />
+        <figcaption>Consensus: two frameworks agree, locked as focus</figcaption>
       </figure>
       <figure>
-        <img src="/screenshots/desktop-full.png" alt="Desktop view: full app with task list, form, and scoring" width="640" loading="lazy" />
-        <figcaption>Desktop: task ledger with priority scores</figcaption>
+        <img src="/screenshots/desktop-full.png" alt="Desktop: full task list with scoring" width="640" loading="lazy" />
+        <figcaption>Task ledger with all three scores</figcaption>
       </figure>
     </div>
+
+    <h2>What it doesn't do</h2>
+
+    <p>PWA only. No native app, no push notifications. Single-user, single-token auth. The scoring weights aren't customizable... they encode one opinionated view of what matters. That view came from one conversation about my own problem. It might not match anyone else's.</p>
 
     <h2>Technical</h2>
 
     <ul>
-      <li>Single-file React app, no build step, runs in the browser</li>
-      <li>Vercel serverless API with Upstash Redis for cross-device sync</li>
-      <li>PWA installable on phone home screen</li>
-      <li>Ukrainian/English language toggle, data stays in Ukrainian internally</li>
-      <li>localStorage cache for offline-first loading</li>
-      <li>38 automated tests covering scoring engine and UI components</li>
+      <li>Single-file React, no build step, Babel in the browser</li>
+      <li>Vercel serverless + Upstash Redis for cross-device sync</li>
+      <li>38 tests (vitest + testing-library)</li>
+      <li>Ukrainian/English toggle</li>
+      <li>Open source, MIT</li>
     </ul>
 
-    <h2>Source code</h2>
-
-    <p>Пріоритети is open source.</p>
-
-    <p style="margin: 2rem 0;"><a href="https://github.com/auraz/prio" class="cta">View on GitHub</a></p>
+    <p style="margin: 2.5rem 0;"><a href="https://github.com/auraz/prio" class="cta">View source on GitHub</a></p>
 
     <div class="rule"></div>
 
-    <div class="contact">
-      <p class="label" style="margin-bottom: 0.5rem;">Contact</p>
-      <p>Oleksandr Kryklia<br>
-      <a href="mailto:kryklia@gmail.com">kryklia@gmail.com</a></p>
-    </div>
+    <p class="signoff">Built by <a href="mailto:kryklia@gmail.com">Oleksandr Kryklia</a> in Kyiv.</p>
   </main>
 </body>
 </html>
